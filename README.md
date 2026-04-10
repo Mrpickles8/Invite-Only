@@ -1,22 +1,31 @@
 # Invite-Only
 
 ## Objective
-Analyze a suspicious email invitation to identify embedded malicious content, trace the delivery mechanism, and document the indicators of compromise associated with the phishing attempt.
+Pivot across IOCs (hash + IP) using VirusTotal to map a full AsyncRAT
+attack chain — from execution parents and dropped files to ClickFix phishing
+and Discord-based delivery.
 
 ### Skills Learned
-- Malicious email artifact analysis
-- Embedded link and attachment investigation
-- Sandbox detonation and behavioral analysis
-- IOC identification and threat reporting
+- SHA256 hash and IP threat intelligence lookup
+- IOC pivoting: hash → filename → execution parents → dropped files
+- Execution lineage reconstruction (361GJX7J → installer.exe)
+- Dropped file identification (Aclient.exe, searchhost.exe, syshelpers.exe,
+  nat.vbs, runsys.vbs)
+- AsyncRAT malware family identification
+- ClickFix phishing technique identification
+- Discord-based delivery platform analysis
 
 ### Tools Used
-- Email client and header analyzer
-- VirusTotal and URLScan.io
-- Sandboxed browser environment
-- Text editor for raw email source inspection
+- TryDetectThis2.0 (VirusTotal)
+- OSINT (external threat intelligence reports)
 
 ## Steps
-The investigation started with extracting the raw email source to examine headers and identify the sending infrastructure. Embedded links were defanged and submitted to URLScan.io for passive analysis. Attachments were detonated in a sandboxed environment to observe behavioral indicators. All IOCs were compiled into a structured report including sender IP, malicious domains, and file hashes.
+SHA256 hash submitted → filename and file type identified. Execution lineage
+revealed two parents: `361GJX7J` then `installer.exe`. installer.exe dropped
+`Aclient.exe`. Second parent dropped `searchhost.exe`, `syshelpers.exe`,
+`nat.vbs`, `runsys.vbs`. IP `101[.]99[.]76[.]120` confirmed C2 infrastructure.
+OSINT correlated findings with AsyncRAT campaign — ClickFix social engineering
+via hijacked Discord invites, fake "Safeguard" bot triggering malware download.
 
-*Ref 1: Raw email source with embedded malicious URL identified*
-*Ref 2: URLScan.io analysis of the destination phishing page*
+*Ref 1: VirusTotal — execution parents and dropped file chain*
+*Ref 2: OSINT correlation — AsyncRAT + ClickFix + Discord delivery*
